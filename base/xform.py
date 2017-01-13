@@ -3,6 +3,7 @@
 
 import util
 
+
 """
 input_form = {
     'name': (8 <= F_str('abc', 'default-xxx') <= 32) & 'optional',
@@ -31,6 +32,7 @@ __all__ = [
     'F_urs',
     'F_mobile',
     'F_phone',
+    'F_idnum',
     'F_datetime',
 ]
 
@@ -231,7 +233,7 @@ class F_int(Input):
 
 class F_str(Input):
     def __init__(self, field_name=None,
-                 default_value=None, format=None):
+            default_value=None, format=None):
         super(F_str, self).__init__(field_name, default_value)
         self._format = format
 
@@ -282,6 +284,17 @@ class F_urs(F_email):
         return self.is_email(value)
 
 
+class F_idnum(Input):
+    def _check(self, value):
+        from idnum import IsIdNum
+        valid = IsIdNum(value)
+        if valid:
+            data = value
+        else:
+            data = self._messages['default']
+        return valid, data
+
+
 class F_phone(Input):
     def _check(self, value):
         if not self._check_mm(len(util.to_unicode(value))):
@@ -299,9 +312,9 @@ class F_phone(Input):
 class F_mobile(Input):
     def _check(self, value):
         valid = (value and
-                 value.startswith('1') and
-                 value.isdigit() and
-                 len(util.to_unicode(value)) == 11)
+                value.startswith('1') and
+                value.isdigit() and
+                len(util.to_unicode(value)) == 11)
         if valid:
             data = value
         else:
