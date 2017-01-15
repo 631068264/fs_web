@@ -10,18 +10,19 @@ import socket
 import struct
 import urllib
 import urlparse
-import uuid
+from base64 import b64encode, b64decode
 from decimal import Decimal
 
-from attrdict import AttrDict
-from flask import current_app
-from html2text import HTML2Text
 import jwt
 import simplejson as json
+from Crypto.Cipher import AES
+from attrdict import AttrDict
+from etc import config
+from flask import current_app
+from html2text import HTML2Text
 
 from base import logger
 from base.cache import cache
-from etc import config
 
 
 def split_list(lst, n_part):
@@ -408,18 +409,40 @@ def hash_password(password, username):
     return hashlib.md5("%s%s%s" % (username, password, username)).hexdigest()
 
 
-def get_device():
-    u4 = str(uuid.uuid4()).split('-')[4]
-    m = md5(u4)[:13]
-    return u4 + m
+key = "VymiluoOWUL6twaK"
 
 
-def get_id():
-    return str(uuid.uuid4()).replace('-', '')
+def encrypt(target):
+    u"""加密一个字符串
+
+    secret: 密钥，长度需要为16个字节
+    代码来自: https://gist.github.com/sekondus/4322469
+    """
+
+    # the block size for the cipher object; must be 16, 24, or 32 for AES
+    BLOCK_SIZE = 16
+
+    # the character used for padding--with a block cipher such as AES, the value
+    # you encrypt must be a multiple of BLOCK_SIZE in length.  This character is
+    # used to ensure that your value is always a multiple of BLOCK_SIZE
+    PADDING = '{'
+
+    # create a cipher object using the random secret
+    cipher = AES.new(key)
+    return b64encode(cipher.encrypt(target + (
+        BLOCK_SIZE - len(target) % BLOCK_SIZE) * PADDING))
 
 
-def get_file_name(file_suffix):
-    return str(uuid.uuid4()).replace('-', '') + file_suffix
+def decrypt(target):
+    u"""解密用encrypt加密的字符串
+
+    secret: 密钥，长度需要为16个字节
+    """
+
+    PADDING = '{'
+    cipher = AES.new(key)
+    raw = cipher.decrypt(b64decode(target))
+    return raw[:(raw.rfind(PADDING) + 1)].rstrip(PADDING)
 
 
 def convert_underscore2camelcase(word):

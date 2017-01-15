@@ -3,7 +3,6 @@
 
 import util
 
-
 """
 input_form = {
     'name': (8 <= F_str('abc', 'default-xxx') <= 32) & 'optional',
@@ -34,6 +33,7 @@ __all__ = [
     'F_phone',
     'F_idnum',
     'F_datetime',
+    'F_bool',
 ]
 
 _default_encoding = 'utf8'
@@ -231,9 +231,20 @@ class F_int(Input):
         return True, value
 
 
+class F_bool(Input):
+    _strict = True
+
+    def _check(self, value):
+        try:
+            value = bool(value)
+        except ValueError:
+            return False, self._messages['default']
+        return True, value
+
+
 class F_str(Input):
     def __init__(self, field_name=None,
-            default_value=None, format=None):
+                 default_value=None, format=None):
         super(F_str, self).__init__(field_name, default_value)
         self._format = format
 
@@ -312,9 +323,9 @@ class F_phone(Input):
 class F_mobile(Input):
     def _check(self, value):
         valid = (value and
-                value.startswith('1') and
-                value.isdigit() and
-                len(util.to_unicode(value)) == 11)
+                 value.startswith('1') and
+                 value.isdigit() and
+                 len(util.to_unicode(value)) == 11)
         if valid:
             data = value
         else:

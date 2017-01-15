@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 # __author__ = 'wuyuxi'
 
-__all__ = ["init"]
+__all__ = ["fs"]

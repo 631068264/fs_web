@@ -3,24 +3,25 @@
 #
 
 import random
-from functools import wraps
+from functools import wraps, partial
 
-from attrdict import AttrDict
-from base.util import safe_json_dumps, url_append, encode_unicode_json, gen_uobj, to_unicode
-from base.xform import FormChecker
 from etc import config
 
 import flask
+from attrdict import AttrDict
 from base import constant as const
 from base import logger
 from base import smartpool
 from base import util
+from base.util import safe_json_dumps, url_append, encode_unicode_json, gen_uobj, to_unicode
+from base.xform import FormChecker
 from flask import make_response
 from flask import request, redirect
 from flask import url_for as base_url_for
 
 __all__ = [
     "general",
+    "app_general",
 
     "render_template",
 
@@ -294,11 +295,14 @@ def url_for(url_rule, **kwargs):
     return base_url_for(url_rule, **kwargs)
 
 
-def general(desc):
+def general(desc, validate_sign=False):
     def deco(old_handler):
         @wraps(old_handler)
         def new_handler(*args, **kwargs):
-            resp = old_handler(*args, **kwargs)
+            if validate_sign and False:
+                resp = ErrorResponse(u"SIGNATURE_NOT_VALID", status=403)
+            else:
+                resp = old_handler(*args, **kwargs)
             if isinstance(resp, TempResponse):
                 # 添加自定义变量
                 resp.context_update(
@@ -322,6 +326,9 @@ def general(desc):
         return new_handler
 
     return deco
+
+
+app_general = partial(general, validate_sign=True)
 
 
 class OkResponse(JsonResponse):

@@ -19,9 +19,9 @@ cache_memorized_timeout = 60 * 60 * 1
 
 # MySQL配置
 db_config = {
-    "db_reader": {"host": "127.0.0.1", "port": 3306, "db": "webcap",
+    "db_reader": {"host": "127.0.0.1", "port": 3306, "db": "fs",
                   "user": "root", "passwd": "wuyuxi08", "charset": encoding},
-    "db_writer": {"host": "127.0.0.1", "port": 3306, "db": "webcap",
+    "db_writer": {"host": "127.0.0.1", "port": 3306, "db": "fs",
                   "user": "root", "passwd": "wuyuxi08", "charset": encoding},
 }
 
@@ -70,4 +70,5 @@ log_config = [
     ["pool-log", "pool.log", "debug"],
     ["query-log", "query.log", "debug"],
     ["response-log", "response.log", "debug"],
+    ["cgi-log", "cgi.log", "debug"],
 ]
