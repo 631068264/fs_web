@@ -2,11 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-class ACCOUNT_STATUS(object):
-    # 正常状态
-    NORMAL = 0
-    # 账号删除
-    DELETED = 1
 
 
 class ROLE(object):
@@ -81,23 +76,20 @@ class TASK_STATUS(object):
     ALL = NAME_DICT.keys()
 
 
-class TYPE(object):
+class TAKE_TYPE(object):
     # 图片
     PHOTOGRAPH = 0
     # 视频
     VIDEO = 1
+    # 音频
+    AUDIO = 3
+
     NAME_DICT = {
         PHOTOGRAPH: "图片",
         VIDEO: "视频",
+        AUDIO: "音频",
     }
     ALL = NAME_DICT.keys()
-
-
-class SRC_STATUS(object):
-    # 正常状态
-    NORMAL = 0
-    # 删除
-    DELETED = 1
 
 
 class DEVICE_STATUS(object):
@@ -121,28 +113,3 @@ class BOOLEAN(object):
         FALSE: "否",
     }
     ALL = (TRUE, FALSE)
-
-
-class DEVICE(object):
-    # 接入设备
-    ANDOID = "android"
-    WINDOWS = "windows"
-    IPHONE = "iphone"
-
-    APP = "app"
-    PC = "pc"
-
-    NAME_DICT = {
-        ANDOID: APP,
-        WINDOWS: PC,
-        IPHONE: APP,
-    }
-    ALL = NAME_DICT.keys()
-
-
-class BLOCK(object):
-    BLOCK = 'block'
-
-
-if __name__ == '__main__':
-    print(1)

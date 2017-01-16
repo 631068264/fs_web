@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
+import os
 
 IS_SEND_SMS = False
 DEFAULT_CAPTCHA = "1234"
@@ -24,7 +25,9 @@ db_config = {
     "db_writer": {"host": "127.0.0.1", "port": 3306, "db": "fs",
                   "user": "root", "passwd": "wuyuxi08", "charset": encoding},
 }
-
+ALLOWED_EXTENSIONS = set(['txt', 'mp4', 'png', 'jpg', 'jpeg', 'gif'])
+project_home = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+UPLOAD_FOLDER = os.path.join(project_home, "uploads")
 # Flask配置
 app_config = {
     "permanent_session_lifetime": True,
@@ -43,7 +46,7 @@ app_config = {
     "CACHE_REDIS_PORT": 6379,
     "CACHE_REDIS_PASSWORD": "",
     "CACHE_REDIS_DB": 1,
-
+    "UPLOAD_FOLDER": UPLOAD_FOLDER,
     # # cache for filesystem
     # "CACHE_DIR": os.path.expanduser("cache/hotgs/"),
     # "CACHE_THRESHOLD": 500 * 1000,

@@ -5,10 +5,14 @@
 @time = 2017/1/13 19:08
 @annotation = '' 
 """
+import os
+
 from attrdict import AttrDict
 from etc import config as cfg
 from flask import Blueprint, request
+from werkzeug.utils import secure_filename
 
+import base.constant as const
 from base import util
 from base.framework import db_conn, OkResponse, json_check, app_general, ErrorResponse
 from base.poolmysql import transaction
@@ -85,8 +89,6 @@ def running():
     if not is_ok:
         return ErrorResponse(app_infos)
     device_id = request.headers["X-DeviceId"]
-    if appinfo:
-        print appinfo
     return OkResponse(appinfo=appinfo)
 
 
@@ -122,3 +124,34 @@ def check_install_app(appinfo, key, running=False):
         ])
         package_names.append(valid_var["package_name"])
     return True, insert_values, package_names
+
+
+@fs.route("/take_picture", methods=['POST'])
+@app_general("获取图片")
+@db_conn("db_writer")
+def take_picture(db_writer):
+    is_ok, upload_file, filename = check_file("picture")
+    if not is_ok:
+        return ErrorResponse(upload_file)
+    save_path = os.path.join(cfg.UPLOAD_FOLDER, filename)
+    QS(db_writer).table(T.take).insert({
+        "device_id": request.headers["X-DeviceId"],
+        "path": save_path,
+        "type": const.TAKE_TYPE.PHOTOGRAPH,
+    })
+    upload_file.save(save_path)
+    return OkResponse()
+
+
+def check_file(key):
+    file_exist = key in request.files
+    if not file_exist:
+        return False, "没有文件", None
+    f = request.files[key]
+    name_exist = f.filename != ""
+    if not name_exist:
+        return False, "文件名空", None
+    good_extension = '.' in f.filename and f.filename.rsplit('.', 1)[1] in cfg.ALLOWED_EXTENSIONS
+    if not good_extension:
+        return False, "文件类型不合", None
+    return True, f, secure_filename(f.filename)
