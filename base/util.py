@@ -23,6 +23,7 @@ from html2text import HTML2Text
 
 from base import logger
 from base.cache import cache
+from base.xform import FormChecker
 
 
 def split_list(lst, n_part):
@@ -509,3 +510,15 @@ def get_static_file_version(full_filename):
     filename = os.path.join(current_app.static_folder, full_filename)
     sha1 = sha1OfFile(filename)
     return sha1
+
+
+def valid_var(vars, check_settings):
+    valid_vars = []
+    for var in vars:
+        check = FormChecker(encode_unicode_json(var, config.encoding),
+                            check_settings, err_msg_encoding=config.encoding)
+        if not check.is_valid():
+            error_msg = [v for v in check.get_error_messages().values() if v is not None]
+            return False, error_msg
+        valid_vars.append(AttrDict(encode_unicode_json(check.get_valid_data(), config.encoding)))
+    return True, valid_vars

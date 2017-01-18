@@ -25,7 +25,7 @@ db_config = {
     "db_writer": {"host": "127.0.0.1", "port": 3306, "db": "fs",
                   "user": "root", "passwd": "wuyuxi08", "charset": encoding},
 }
-ALLOWED_EXTENSIONS = set(['txt', 'mp4', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt', 'mp4', 'png', 'jpg', 'jpeg', 'gif', '3gp'])
 project_home = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 UPLOAD_FOLDER = os.path.join(project_home, "uploads")
 # Flask配置

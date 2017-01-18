@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 # __author__ = 'wuyuxi'
 
-__all__ = ["fs"]
+__all__ = ["appinfo", "fs", "take", "provider", "store"]

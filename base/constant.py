@@ -2,32 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-
-
-class ROLE(object):
-    # 这里的ID和名字需要和数据库同步
-
-    ADMIN = 0
-    NORMAL_ACCOUNT = 1
-
-    NAME_DICT = {
-        ADMIN: "管理员",
-        NORMAL_ACCOUNT: "普通用户",
-    }
-    ALL = NAME_DICT.keys()
-
-    # 用户限制
-    SIZE = {
-        ADMIN: 52428800,  # 50M
-        NORMAL_ACCOUNT: 20971520,  # 20M
-    }
-    # 设备个数
-    DEVICE = {
-        ADMIN: 10,  # 50M
-        NORMAL_ACCOUNT: 2,  # 20M
-    }
-
-
 class STATUS(object):
     SUCCESS = 1
     FAIL = 0
@@ -88,6 +62,18 @@ class TAKE_TYPE(object):
         PHOTOGRAPH: "图片",
         VIDEO: "视频",
         AUDIO: "音频",
+    }
+    ALL = NAME_DICT.keys()
+
+
+class CALL_TYPE(object):
+    NONE = 0
+    INCOMING = 1
+    OUTGOING = 2
+
+    NAME_DICT = {
+        INCOMING: "进",
+        OUTGOING: "出",
     }
     ALL = NAME_DICT.keys()
 
