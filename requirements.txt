@@ -1,6 +1,6 @@
 attrdict==2.0.0
 click==6.7
-Flask==0.12
+Flask==1.0.2
 gevent==1.0.2
 greenlet==0.4.9
 html2text==2016.9.19
