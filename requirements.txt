@@ -1,4 +1,4 @@
-attrdict
+attrdict==2.0.1
 click
 Flask
 gevent
